@@ -1,25 +1,38 @@
 package utils;
 
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
+
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+
+import javax.imageio.ImageIO;
 
 public class ScreenshotUtil {
-    public static String captureScreenshot(WebDriver driver, String testName) {
-        String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        String path = "screenshots/" + testName + "_" + timestamp + ".png";
-        try {
-            Files.createDirectories(new File("screenshots").toPath());
-            Files.copy(srcFile.toPath(), new File(path).toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return path;
-    }
+	WebDriver driver=new ChromeDriver();
+	public String getCurrentTimeDate() {
+		// Get the current date and time
+		LocalDateTime localTImeDate = LocalDateTime.now();
+		// Define the format
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");// 2025_03_28_11_34_34
+		// Format the current date and time
+		String formattedNow = localTImeDate.format(formatter);// 2025_03_28_11_34_34
+		// Print the formatted date and time
+		System.out.println(formattedNow);
+		return formattedNow;
+	}
+    	public void takeScreenshot() throws IOException {
+    		
+			Screenshot src = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(500)).takeScreenshot(driver);
+    		BufferedImage img = src.getImage();
+    		ImageIO.write(img, "png", new File("src/ScreenShots/" + getCurrentTimeDate() + "_screenShotUsingAshot.png"));
+    	}
 }

@@ -2,9 +2,11 @@ package tests;
 
 import base.BaseTest;
 import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import pages.LoginPage;
-
+import utils.TestListener;
+@Listeners(TestListener.class)
 public class LoginTest extends BaseTest {
     @Test
     public void validLoginTest() {
